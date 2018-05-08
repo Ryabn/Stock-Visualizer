@@ -69,6 +69,8 @@ public class StockDisplay extends JPanel {
 
         jpSideBar.add(jpControlButtons, sideBarLayout.CENTER);
 
+        jlStocks = new JList<>();
+
         jlStocks.setBorder(new EmptyBorder(10,30, 10, 30));
         jlStocks.setBackground(new Color(77, 92, 122));
         jlStocks.setForeground(new Color(255, 255, 255));
