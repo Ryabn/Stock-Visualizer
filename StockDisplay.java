@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class StockDisplay extends JPanel {
+    private static ArrayList<String> stockList;
     private JList<String> jlStocks;
 
     private JPanel jpControlButtons;
@@ -21,11 +22,6 @@ public class StockDisplay extends JPanel {
     private JButton jbNext;
     private JButton jbPrevious;
 
-    private static ArrayList<Double> priceList;
-    private static ArrayList<Integer> xPosList;
-    private static ArrayList<String> stockList;
-    private static ArrayList<String> intervalList;
-
     private JPanel jpStockVisualizer;
 
     private double stockHigh;
@@ -34,6 +30,8 @@ public class StockDisplay extends JPanel {
     public StockDisplay(){
         createComponents();
         wireComponents();
+        StockParser.initStockParser();
+        StockParser.displayStockInfo("TIME_SERIES_INTRADAY", "AAPL","5min");
     }
     public void createComponents(){
         BorderLayout mainLayout = new BorderLayout();
@@ -42,7 +40,7 @@ public class StockDisplay extends JPanel {
 
         setLayout(mainLayout);
 
-        jpStockVisualizer = new JPanel();
+        jpStockVisualizer = new StockGraph();
         jpStockVisualizer.setBackground(new Color(25, 31, 43));
         jpStockVisualizer.setForeground(Color.white);
         add(jpStockVisualizer, mainLayout.CENTER);
@@ -111,42 +109,6 @@ public class StockDisplay extends JPanel {
         });
     }
 
-    /**
-     * displays array onto JPanel and their respective lengths
-     * @param randArr
-     */
-    public void displayArray(int[] randArr){
-        repaint();
-    }
-
-    @Override
-    public void paint(Graphics g){
-        super.paint(g);
-        graphStock(g);
-    }
-
-    public void calculateXPos(){
-        int panelHeight = jpStockVisualizer.getHeight() - 20;
-        for(int i = 0; i < priceList.size(); i++){
-            xPosList.add(panelHeight * );
-        }
-    }
-
-    public void graphStock(Graphics g){
-        int panelWidth = jpStockVisualizer.getWidth() - 40;
-
-        int intervalWidth = (int)((double)panelWidth / priceList.size());
-
-        int y = 20;
-        for( int i = 0; i < xPosList.size() - 1; i++ ){
-            g.drawLine(xPosList.get(i), y, xPosList.get(i+1), (y += intervalWidth));
-
-        }
-
-    }
-    public void calculateGraphDimensions(){
-
-    }
 
     public void displayArrayGeneral(Graphics g){
         int panelWidth = jpStockVisualizer.getWidth();

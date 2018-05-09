@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class StockParser {
+
     private static ArrayList<Double> priceList;
-    private static ArrayList<String> stockList;
     private static ArrayList<String> intervalList;
     private static JsonObject value;
     private static JsonObject metaData;
@@ -18,12 +18,14 @@ public class StockParser {
     private static double stockHigh;
     private static double stockLow;
 
-    public static ArrayList<String> getStockList() {
-        return stockList;
-    }
     public static ArrayList<Double> getPriceList() {
         return priceList;
     }
+
+    public static ArrayList<String> getIntervalList() {
+        return intervalList;
+    }
+
     public static double getStockHigh() {
         return stockHigh;
     }
@@ -33,14 +35,12 @@ public class StockParser {
 
     public static void initStockParser(){
         priceList = new ArrayList<>();
-        stockList = new ArrayList<>();
         intervalList = new ArrayList<>();
     }
 
     public static void displayStockInfo( String timeSeries, String symbol, String interval ){
         String data = keys.getStockInformation(timeSeries, symbol, interval);
         value = Json.parse(data).asObject();
-
         extractPrices();
     }
     public static void extractPrices(){
@@ -61,7 +61,10 @@ public class StockParser {
                                     .asObject()
                                     .getString("4. close", "0")
                     );
+            String intervalAt = key.getName();
+            intervalList.add(intervalAt);
             priceList.add(stockValueAt);
+            System.out.println(intervalAt);
         }
         stockHigh = Collections.max(priceList);
         stockLow = Collections.min(priceList);
