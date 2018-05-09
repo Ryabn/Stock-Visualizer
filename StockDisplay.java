@@ -21,10 +21,14 @@ public class StockDisplay extends JPanel {
     private JButton jbNext;
     private JButton jbPrevious;
 
+    private static ArrayList<Double> priceList;
+    private static ArrayList<String> stockList;
+    private static ArrayList<String> intervalList;
 
     private JPanel jpStockVisualizer;
 
-    private ArrayList<String> stockList;
+    private double stockHigh;
+    private double stockLow;
 
     public StockDisplay(){
         createComponents();
@@ -117,10 +121,20 @@ public class StockDisplay extends JPanel {
     @Override
     public void paint(Graphics g){
         super.paint(g);
-//        if(randomizedArray != null){
-//            displayArrayGeneral(g);
-//        }
-        //drawSelection(g);
+        graphStock(g);
+    }
+    public void graphStock(Graphics g){
+        int panelWidth = jpStockVisualizer.getWidth();
+        int panelHeight = jpStockVisualizer.getHeight() - 20;
+
+        stockHigh = priceList.get(0);
+        stockLow = priceList.get(0);
+
+        for(int i = 1; i < priceList.size(); i++){
+            double stockPrice = priceList.get(i);
+//            if(stockHigh < )
+
+        }
     }
 
     public void displayArrayGeneral(Graphics g){
