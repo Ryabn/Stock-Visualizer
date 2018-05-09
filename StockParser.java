@@ -2,17 +2,13 @@ package tech.ryanqyang;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class StockParser {
 
     private static ArrayList<Double> priceList;
     private static ArrayList<String> intervalList;
-    private static JsonObject value;
     private static JsonObject metaData;
 
     private static double stockHigh;
@@ -21,11 +17,9 @@ public class StockParser {
     public static ArrayList<Double> getPriceList() {
         return priceList;
     }
-
     public static ArrayList<String> getIntervalList() {
         return intervalList;
     }
-
     public static double getStockHigh() {
         return stockHigh;
     }
@@ -38,12 +32,24 @@ public class StockParser {
         intervalList = new ArrayList<>();
     }
 
+    /**
+     * Retrieves stock information by making an API call using the APICalls.java method and gets the response in JSON
+     * It then parses the JSON file and puts all the information in a Java readable format
+     *
+     * @param timeSeries
+     * @param symbol
+     * @param interval
+     */
     public static void displayStockInfo( String timeSeries, String symbol, String interval ){
-        String data = keys.getStockInformation(timeSeries, symbol, interval);
-        value = Json.parse(data).asObject();
-        extractPrices();
+        JsonObject value = Json.parse(APICalls.getStockInformation(timeSeries, symbol, interval)).asObject();
+        extractPrices(value);
     }
-    public static void extractPrices(){
+
+    /**
+     * Parses JSON data and stores into java accessible data structures
+     * @param value
+     */
+    public static void extractPrices(JsonObject value){
         for (JsonObject.Member member : value) {
             String name = member.getName();
             if(name.equals("Meta Data")){
@@ -64,7 +70,6 @@ public class StockParser {
             String intervalAt = key.getName();
             intervalList.add(intervalAt);
             priceList.add(stockValueAt);
-            System.out.println(intervalAt);
         }
         stockHigh = Collections.max(priceList);
         stockLow = Collections.min(priceList);

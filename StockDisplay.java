@@ -22,10 +22,7 @@ public class StockDisplay extends JPanel {
     private JButton jbNext;
     private JButton jbPrevious;
 
-    private JPanel jpStockVisualizer;
-
-    private double stockHigh;
-    private double stockLow;
+    private StockGraph jpStockVisualizer;
 
     public StockDisplay(){
         createComponents();
