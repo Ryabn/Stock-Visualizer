@@ -6,6 +6,7 @@ import com.eclipsesource.json.JsonValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class StockParser {
     private static ArrayList<Double> priceList;
@@ -14,9 +15,20 @@ public class StockParser {
     private static JsonObject value;
     private static JsonObject metaData;
 
+    private static double stockHigh;
+    private static double stockLow;
 
     public static ArrayList<String> getStockList() {
         return stockList;
+    }
+    public static ArrayList<Double> getPriceList() {
+        return priceList;
+    }
+    public static double getStockHigh() {
+        return stockHigh;
+    }
+    public static double getStockLow() {
+        return stockLow;
     }
 
     public static void initStockParser(){
@@ -40,10 +52,7 @@ public class StockParser {
                 value = member.getValue().asObject();
                 break;
             }
-
-
         }
-
         for(JsonObject.Member key : value.asObject()){
             Double stockValueAt =
                     Double.parseDouble(
@@ -54,5 +63,7 @@ public class StockParser {
                     );
             priceList.add(stockValueAt);
         }
+        stockHigh = Collections.max(priceList);
+        stockLow = Collections.min(priceList);
     }
 }

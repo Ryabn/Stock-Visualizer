@@ -22,6 +22,7 @@ public class StockDisplay extends JPanel {
     private JButton jbPrevious;
 
     private static ArrayList<Double> priceList;
+    private static ArrayList<Integer> xPosList;
     private static ArrayList<String> stockList;
     private static ArrayList<String> intervalList;
 
@@ -123,18 +124,28 @@ public class StockDisplay extends JPanel {
         super.paint(g);
         graphStock(g);
     }
-    public void graphStock(Graphics g){
-        int panelWidth = jpStockVisualizer.getWidth();
+
+    public void calculateXPos(){
         int panelHeight = jpStockVisualizer.getHeight() - 20;
+        for(int i = 0; i < priceList.size(); i++){
+            xPosList.add(panelHeight * );
+        }
+    }
 
-        stockHigh = priceList.get(0);
-        stockLow = priceList.get(0);
+    public void graphStock(Graphics g){
+        int panelWidth = jpStockVisualizer.getWidth() - 40;
 
-        for(int i = 1; i < priceList.size(); i++){
-            double stockPrice = priceList.get(i);
-//            if(stockHigh < )
+        int intervalWidth = (int)((double)panelWidth / priceList.size());
+
+        int y = 20;
+        for( int i = 0; i < xPosList.size() - 1; i++ ){
+            g.drawLine(xPosList.get(i), y, xPosList.get(i+1), (y += intervalWidth));
 
         }
+
+    }
+    public void calculateGraphDimensions(){
+
     }
 
     public void displayArrayGeneral(Graphics g){
