@@ -15,12 +15,8 @@ public class StockDisplay extends JPanel {
 
     private JPanel jpControlButtons;
     private JPanel jpSideBar;
-    private JSlider jsAnimationSpeed;
 
     private JButton jbStart;
-    private JButton jbStop;
-    private JButton jbNext;
-    private JButton jbPrevious;
 
     private StockGraph jpStockVisualizer;
 
@@ -31,7 +27,7 @@ public class StockDisplay extends JPanel {
     public void createComponents(){
         BorderLayout mainLayout = new BorderLayout();
         BorderLayout sideBarLayout = new BorderLayout(10, 30);
-        GridLayout visualizerControls = new GridLayout(2, 2, 5, 10);
+        GridLayout visualizerControls = new GridLayout(3, 3, 5, 10);
 
         setLayout(mainLayout);
 
@@ -50,20 +46,11 @@ public class StockDisplay extends JPanel {
         jpControlButtons.setLayout(visualizerControls);
 
         jbStart = new JButton("Start");
-        jbStop = new JButton("Stop");
-        jbPrevious = new JButton("Next");
-        jbNext = new JButton("Prev");
 
         jbStart.setOpaque(true);
         jbStart.setBackground(new Color(84, 216, 99));
 
-        jbStop.setOpaque(true);
-        jbStop.setBackground(new Color(196, 0, 0));
-
         jpControlButtons.add(jbStart);
-        jpControlButtons.add(jbStop);
-        jpControlButtons.add(jbPrevious);
-        jpControlButtons.add(jbNext);
 
         jpSideBar.add(jpControlButtons, sideBarLayout.CENTER);
 
@@ -76,12 +63,6 @@ public class StockDisplay extends JPanel {
 
         jlStocks.setFixedCellHeight(30);
         jpSideBar.add(jlStocks, sideBarLayout.NORTH);
-
-        jsAnimationSpeed = new JSlider();
-        jsAnimationSpeed.setForeground(new Color(255, 255, 255));
-        jsAnimationSpeed.setPaintTicks(true);
-
-        jpSideBar.add(jsAnimationSpeed, sideBarLayout.SOUTH);
 
         add(jpSideBar, mainLayout.EAST);
         setBackground(new Color(25, 31, 43));

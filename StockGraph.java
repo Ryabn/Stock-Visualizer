@@ -31,7 +31,7 @@ public class StockGraph extends JPanel{
      */
     public void displayStockGraph(){
         try {
-            StockParser.displayStockInfo("TIME_SERIES_INTRADAY", "AAPL", "5min");
+            StockParser.displayStockInfo("TIME_SERIES_INTRADAY", "MSFT", "5min");
             calculateGraphDimensions();
             calculateXPos();
             bHasGraph = true;
@@ -56,31 +56,44 @@ public class StockGraph extends JPanel{
                 stockInnerPadding, stockRange );
     }
 
+//    public void
+
     @Override
     public void paint(Graphics g){
         super.paint(g);
         if(bHasGraph){
+            calculateXPos();
             graphStock(g);
         }
     }
 
     public void calculateXPos(){
-        int panelHeight = this.getHeight() - (GRAPH_OUTER_PADDING * 2);
+        int panelHeight = this.getHeight() - (GRAPH_OUTER_PADDING * 4);
         xPosList.clear();
         for(int i = 0; i < priceList.size(); i++){
-            xPosList.add(GRAPH_OUTER_PADDING + (int)(((priceList.get(i) - stockLow) / stockRange) * panelHeight) );
+            xPosList.add((int)(((priceList.get(i) - stockLow + stockInnerPadding) / stockRange) * panelHeight) );
         }
     }
 
     public void graphStock(Graphics g){
         int panelWidth = this.getWidth() - 40;
-
+        int panelHeight = this.getHeight() - (GRAPH_OUTER_PADDING * 2);
         int intervalWidth = (int)((double)panelWidth / priceList.size());
-
-        int y = 20;
+        final int Y_START = 20;
+        int y = Y_START;
         for( int i = 0; i < xPosList.size() - 1; i++ ){
+            g.setColor( new Color(131, 192, 239));
             g.drawLine( y, xPosList.get(i),(y += intervalWidth), xPosList.get(i+1) );
         }
+        g.setColor(new Color(94, 0, 196));
+
+        final int LINE_THICKNESS = 5;
+
+        for(int i = 0; i <= LINE_THICKNESS; i++){
+            g.drawLine(Y_START, panelHeight + i, y + LINE_THICKNESS, panelHeight + i);
+            g.drawLine(y + i, 20, y + i, panelHeight + LINE_THICKNESS);
+        }
+//        g.drawLine(Y_START, panelHeight, y, panelHeight);
 
     }
 }
