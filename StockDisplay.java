@@ -27,8 +27,6 @@ public class StockDisplay extends JPanel {
     public StockDisplay(){
         createComponents();
         wireComponents();
-        StockParser.initStockParser();
-        StockParser.displayStockInfo("TIME_SERIES_INTRADAY", "AAPL","5min");
     }
     public void createComponents(){
         BorderLayout mainLayout = new BorderLayout();
@@ -101,44 +99,11 @@ public class StockDisplay extends JPanel {
         jbStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                repaint();
+                selectedStock();
             }
         });
     }
-
-
-    public void displayArrayGeneral(Graphics g){
-        int panelWidth = jpStockVisualizer.getWidth();
-        int panelHeight = jpStockVisualizer.getHeight() - 20;
-//        barWidth = (panelWidth - 40) / randomizedArray.length;
-//        int width = barWidth - 4;
-//
-//        for (int i = 0; i < randomizedArray.length; i++) {
-//            int height = (int)((randomizedArray[i] / 100.0) * (panelHeight * 0.8));
-//            int xPos = 20 + (i * barWidth) + 2;
-//            int yPos = panelHeight - height - 30;
-//            g.setColor(new Color(11, 142, 229));
-//            g.fillRect(xPos, yPos, width, height);
-//        }
-    }
-
-    public void drawSelection(Graphics g){
-        int panelWidth = jpStockVisualizer.getWidth();
-        int panelHeight = jpStockVisualizer.getHeight() - 20;
-
-//        for (int i = 0; i < randomizedArray.length; i++) {
-//            int height = (int)((randomizedArray[i] / 100.0) * (panelHeight * 0.8));
-//            int xPos = 20 + (i * barWidth) + 2;
-//            int yPos = panelHeight - height - 30;
-//            if(i > randomizedArray[randomizedArray.length - 3]){
-//                g.setColor(new Color(255, 119, 0));
-//            }else if(i == randomizedArray[randomizedArray.length - 3]){
-//                g.setColor(new Color(11, 142, 229));
-//                g.fillOval(xPos, yPos, width, width);
-//            }else{
-//                g.setColor(new Color(11, 142, 229));
-//            }
-//            g.fillRect(xPos, yPos, width, height);
-//        }
+    public void selectedStock(){
+        jpStockVisualizer.displayStockGraph();
     }
 }

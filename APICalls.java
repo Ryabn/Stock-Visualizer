@@ -15,21 +15,13 @@ public class APICalls {
      * @param interval
      * @return
      */
-    public static String getStockInformation( String timeSeries, String symbol, String interval ){
+    public static String getStockInformation( String timeSeries, String symbol, String interval ) throws Exception{
         String url = "https://www.alphavantage.co/query" +
                 "?function=" + timeSeries +
                 "&symbol=" + symbol +
                 "&interval=" + interval +
                 "&apikey=" + keys.getAlphaVantageApiKey();
-
-        String response = null;
-
-        try{
-            response = getReq(url);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return response;
+        return getReq(url);
     }
 
     /**
@@ -46,9 +38,6 @@ public class APICalls {
         con.setRequestMethod("GET");
 
         System.setProperty("http.agent", "");
-
-        int responseCode = con.getResponseCode();
-
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
         String inputLine;

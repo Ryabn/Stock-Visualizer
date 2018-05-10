@@ -40,7 +40,7 @@ public class StockParser {
      * @param symbol
      * @param interval
      */
-    public static void displayStockInfo( String timeSeries, String symbol, String interval ){
+    public static void displayStockInfo( String timeSeries, String symbol, String interval ) throws Exception{
         JsonObject value = Json.parse(APICalls.getStockInformation(timeSeries, symbol, interval)).asObject();
         extractPrices(value);
     }
