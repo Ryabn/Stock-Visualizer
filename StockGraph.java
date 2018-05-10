@@ -91,9 +91,8 @@ public class StockGraph extends JPanel{
 
         for(int i = 0; i <= LINE_THICKNESS; i++){
             g.drawLine(Y_START, panelHeight + i, y + LINE_THICKNESS, panelHeight + i);
-            g.drawLine(y + i, 20, y + i, panelHeight + LINE_THICKNESS);
+            g.drawLine(y + i, 10, y + i, panelHeight + LINE_THICKNESS);
         }
-//        g.drawLine(Y_START, panelHeight, y, panelHeight);
 
     }
 }

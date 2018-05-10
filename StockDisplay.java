@@ -18,7 +18,7 @@ public class StockDisplay extends JPanel {
 
     private JButton jbStart;
 
-    private StockGraph jpStockVisualizer;
+    private StockData jpStockVisualizer;
 
     public StockDisplay(){
         createComponents();
@@ -31,7 +31,7 @@ public class StockDisplay extends JPanel {
 
         setLayout(mainLayout);
 
-        jpStockVisualizer = new StockGraph();
+        jpStockVisualizer = new StockData();
         jpStockVisualizer.setBackground(new Color(25, 31, 43));
         jpStockVisualizer.setForeground(Color.white);
         add(jpStockVisualizer, mainLayout.CENTER);

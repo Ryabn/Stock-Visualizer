@@ -20,6 +20,9 @@ public class StockParser {
     public static ArrayList<String> getIntervalList() {
         return intervalList;
     }
+    public static JsonObject getMetaData() {
+        return metaData;
+    }
     public static double getStockHigh() {
         return stockHigh;
     }
@@ -50,6 +53,8 @@ public class StockParser {
      * @param value
      */
     public static void extractPrices(JsonObject value){
+        priceList.clear();
+        intervalList.clear();
         for (JsonObject.Member member : value) {
             String name = member.getName();
             if(name.equals("Meta Data")){
