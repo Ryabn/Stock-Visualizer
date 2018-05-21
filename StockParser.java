@@ -7,32 +7,33 @@ import java.util.Collections;
 
 public class StockParser {
 
-    private static ArrayList<Double> priceList;
-    private static ArrayList<String> intervalList;
-    private static JsonObject metaData;
+    private ArrayList<Double> priceList;
+    private ArrayList<String> intervalList;
+    private JsonObject metaData;
 
-    private static double stockHigh;
-    private static double stockLow;
+    private double stockHigh;
+    private double stockLow;
 
-    public static ArrayList<Double> getPriceList() {
+    public ArrayList<Double> getPriceList() {
         return priceList;
     }
-    public static ArrayList<String> getIntervalList() {
+    public ArrayList<String> getIntervalList() {
         return intervalList;
     }
-    public static JsonObject getMetaData() {
+    public JsonObject getMetaData() {
         return metaData;
     }
-    public static double getStockHigh() {
+    public double getStockHigh() {
         return stockHigh;
     }
-    public static double getStockLow() {
+    public double getStockLow() {
         return stockLow;
     }
 
-    public static void initStockParser(){
-        priceList = new ArrayList<>();
-        intervalList = new ArrayList<>();
+    public StockParser( String timeSeries, String symbol, String interval ) throws Exception{
+        this.priceList = new ArrayList<>();
+        this.intervalList = new ArrayList<>();
+        displayStockInfo(timeSeries, symbol, interval);
     }
 
     /**
@@ -43,7 +44,7 @@ public class StockParser {
      * @param symbol
      * @param interval
      */
-    public static void displayStockInfo( String timeSeries, String symbol, String interval ) throws Exception{
+    public void displayStockInfo( String timeSeries, String symbol, String interval ) throws Exception{
         JsonObject value = Json.parse(APICalls.getStockInformation(timeSeries, symbol, interval)).asObject();
         extractPrices(value);
     }
@@ -52,7 +53,7 @@ public class StockParser {
      * Parses JSON data and stores into java accessible data structures
      * @param value
      */
-    public static void extractPrices(JsonObject value){
+    public void extractPrices(JsonObject value){
         priceList.clear();
         intervalList.clear();
         for (JsonObject.Member member : value) {

@@ -86,5 +86,6 @@ public class StockDisplay extends JPanel {
     }
     public void selectedStock(){
         jpStockVisualizer.displayStockGraph();
+        AutocompleteSearch n = new AutocompleteSearch();
     }
 }
