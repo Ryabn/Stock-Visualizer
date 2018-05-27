@@ -12,32 +12,38 @@ import java.util.TreeMap;
 
 public class AutocompleteSearch extends JTextField{
     private TreeMap<String, String> companyToSymbol;
-    private TreeMap<String, String> symbolToCompany;
 
     public AutocompleteSearch(){
         super();
         companyToSymbol = new TreeMap<>();
-        symbolToCompany = new TreeMap<>();
-        retrieveList();
+        loadAll();
     }
 
     public String[] updateSuggestions(String userInput){
         return getSameStart(userInput).toArray(new String[0]);
     }
+
+    /**
+     * Checks the entire map for its values and its keys to see if any of them match the user input
+     * It returns a maximum of 20 values so it doesn't choke up the ui
+     *
+     * @param userInput
+     * @return
+     */
     public ArrayList<String> getSameStart(String userInput){
         int count1 = 0;
         int count2 = 0;
         int len = userInput.length();
         ArrayList<String> suggestions = new ArrayList<>();
         for (Map.Entry<String, String> details : companyToSymbol.entrySet()){
-            if( !( details.getKey().length() < len ) && count1 <= 5){
+            if( !( details.getKey().length() < len ) && count1 <= 10){
                 if( details.getKey().substring(0, len).toLowerCase().equals(userInput.toLowerCase()) ){
                     suggestions.add(details.getKey() + " - " + details.getValue());
                     count1++;
                     continue;
                 }
             }
-            if( !( details.getValue().length() < len ) && count2 <= 5 ){
+            if( !( details.getValue().length() < len ) && count2 <= 10 ){
                 if( details.getValue().substring(0, len).toLowerCase().equals(userInput.toLowerCase()) ){
                     suggestions.add(details.getValue() + " - " + details.getKey());
                     count2++;
@@ -53,8 +59,8 @@ public class AutocompleteSearch extends JTextField{
      * "SYB","STOCK COMPANY NAME2"....\n
      */
     public void parse(){
-        File f = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocks.txt");
-        try(PrintWriter p = new PrintWriter(new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList.txt"));){
+        File f = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocks2.txt");
+        try(PrintWriter p = new PrintWriter(new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList2.txt"));){
             try(Scanner sc = new Scanner(f)){
                 sc.nextLine();
                 while(sc.hasNext()){
@@ -84,13 +90,19 @@ public class AutocompleteSearch extends JTextField{
         }
     }
 
+    public void loadAll(){
+        File listFile = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList.txt");
+        File listFile2 = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList2.txt");
+        retrieveList(listFile);
+        retrieveList(listFile2);
+    }
+
     /**
      * Takes formatted stocks and symbols from generated file from parse() and puts them inside 2 tree maps
      * they map the stocks together in sorted order so autocomplete can work best
      *
      */
-    public void retrieveList(){
-        File listFile = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList.txt");
+    public void retrieveList(File listFile){
         try(Scanner sc = new Scanner(listFile)){
             while(sc.hasNext()) {
                 String stockMeta = sc.nextLine();
@@ -100,7 +112,6 @@ public class AutocompleteSearch extends JTextField{
                         //reassigning string creates a new reference but old reference is kept because of the maps
                         String symb = stockMeta.substring(0, i).trim();
                         String company = stockMeta.substring(i + 1);
-                        symbolToCompany.put(symb, company);
                         companyToSymbol.put(company, symb);
                         break findColon;
                     }
