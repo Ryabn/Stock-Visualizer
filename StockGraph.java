@@ -22,19 +22,19 @@ public class StockGraph extends JPanel{
 
     public StockGraph(){
         bHasGraph = false;
-        try {
-            stockInfo = new StockParser("TIME_SERIES_INTRADAY", "MSFT", "5min");
-            this.xPosList = new ArrayList<>();
-        }catch(Exception e) {
-            System.err.println("The requested API call could not be made");
-            e.printStackTrace();
-        }
     }
 
     /**
      * Called when a stock is selected. It sends the requested user info to StockParser.java and
      */
-    public void displayStockGraph(){
+    public void displayStockGraph(String symbol){
+        try {
+            stockInfo = new StockParser("TIME_SERIES_INTRADAY", symbol, "5min");
+            this.xPosList = new ArrayList<>();
+        }catch(Exception e) {
+            System.err.println("The requested API call could not be made");
+            e.printStackTrace();
+        }
         calculateGraphDimensions();
         calculateXPos();
         bHasGraph = true;

@@ -7,7 +7,9 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class StockDisplay extends JPanel {
     private static ArrayList<String> stockList;
@@ -19,6 +21,8 @@ public class StockDisplay extends JPanel {
     private JButton jbStart;
 
     private StockData jpStockVisualizer;
+    private AutocompleteSearch jtfSearch;
+
 
     public StockDisplay(){
         createComponents();
@@ -45,6 +49,11 @@ public class StockDisplay extends JPanel {
         jpControlButtons.setBackground(new Color(25, 31, 43));
         jpControlButtons.setLayout(visualizerControls);
 
+        jtfSearch = new AutocompleteSearch();
+        jtfSearch.setBackground(Color.white);
+
+//        jpSideBar.add(jtfSearch, sideBarLayout.NORTH);
+
         jbStart = new JButton("Start");
 
         jbStart.setOpaque(true);
@@ -53,8 +62,10 @@ public class StockDisplay extends JPanel {
         jpControlButtons.add(jbStart);
 
         jpSideBar.add(jpControlButtons, sideBarLayout.CENTER);
+        jpSideBar.add(jtfSearch, sideBarLayout.SOUTH);
 
-        jlStocks = new JList<>();
+
+        jlStocks = new JList<>(new String[]{"MSFT", "AAPL"});
 
         jlStocks.setBorder(new EmptyBorder(10,30, 10, 30));
         jlStocks.setBackground(new Color(77, 92, 122));
@@ -70,22 +81,38 @@ public class StockDisplay extends JPanel {
     }
 
     public void wireComponents(){
+        jtfSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jlStocks = new JList<>(jtfSearch.updateSuggestions(jtfSearch.getText()));
+                repaint();
+                System.out.println(jtfSearch.getText());
+            }
+        });
         jlStocks.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if(!e.getValueIsAdjusting()) {
+                if(!e.getValueIsAdjusting()){
+                    String name = jlStocks.getSelectedValue();
+                    System.out.print(name);
+                    for(int i = 0; i < name.length(); i++){
+                        if(name.charAt(i) == ' '){
+                            selectedStock(name.substring(0, i));
+                            break;
+                        }
+                    }
+                    selectedStock(jlStocks.getSelectedValue());
                 }
             }
         });
         jbStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedStock();
+//                selectedStock();
             }
         });
     }
-    public void selectedStock(){
-        jpStockVisualizer.displayStockGraph();
-        AutocompleteSearch n = new AutocompleteSearch();
+    public void selectedStock(String symbol){
+        jpStockVisualizer.displayStockGraph(symbol);
     }
 }

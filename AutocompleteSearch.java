@@ -4,19 +4,43 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-public class AutocompleteSearch extends JComboBox<String>{
+public class AutocompleteSearch extends JTextField{
     private TreeMap<String, String> companyToSymbol;
     private TreeMap<String, String> symbolToCompany;
 
     public AutocompleteSearch(){
-        super(new String[]{});
+        super();
         companyToSymbol = new TreeMap<>();
         symbolToCompany = new TreeMap<>();
         retrieveList();
+    }
+
+    public String[] updateSuggestions(String userInput){
+        return getSameStart(userInput).toArray(new String[0]);
+    }
+    public ArrayList<String> getSameStart(String userInput){
+        int len = userInput.length();
+        ArrayList<String> suggestions = new ArrayList<>();
+        for (Map.Entry<String, String> details : companyToSymbol.entrySet()){
+            if( !( details.getKey().length() < len ) ){
+                if( details.getKey().substring(0, len).equals(userInput) ){
+                    suggestions.add(details.getKey() + " - " + details.getValue());
+                    continue;
+                }
+            }
+            if( !( details.getValue().length() < len ) ){
+                if( details.getValue().substring(0, len).equals(userInput) ){
+                    suggestions.add(details.getValue() + " - " + details.getKey());
+                }
+            }
+        }
+        return suggestions;
     }
 
     /**
@@ -69,8 +93,6 @@ public class AutocompleteSearch extends JComboBox<String>{
                 findColon:
                 for (int i = 0; i < stockMeta.length(); i++) {
                     if (stockMeta.charAt(i) == ':') {
-                        System.out.println(stockMeta.substring(i + 1));
-
                         //reassigning string creates a new reference but old reference is kept because of the maps
                         String symb = stockMeta.substring(0, i).trim();
                         String company = stockMeta.substring(i + 1);
