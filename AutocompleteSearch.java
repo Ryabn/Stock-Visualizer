@@ -25,18 +25,22 @@ public class AutocompleteSearch extends JTextField{
         return getSameStart(userInput).toArray(new String[0]);
     }
     public ArrayList<String> getSameStart(String userInput){
+        int count1 = 0;
+        int count2 = 0;
         int len = userInput.length();
         ArrayList<String> suggestions = new ArrayList<>();
         for (Map.Entry<String, String> details : companyToSymbol.entrySet()){
-            if( !( details.getKey().length() < len ) ){
-                if( details.getKey().substring(0, len).equals(userInput) ){
+            if( !( details.getKey().length() < len ) && count1 <= 5){
+                if( details.getKey().substring(0, len).toLowerCase().equals(userInput.toLowerCase()) ){
                     suggestions.add(details.getKey() + " - " + details.getValue());
+                    count1++;
                     continue;
                 }
             }
-            if( !( details.getValue().length() < len ) ){
-                if( details.getValue().substring(0, len).equals(userInput) ){
+            if( !( details.getValue().length() < len ) && count2 <= 5 ){
+                if( details.getValue().substring(0, len).toLowerCase().equals(userInput.toLowerCase()) ){
                     suggestions.add(details.getValue() + " - " + details.getKey());
+                    count2++;
                 }
             }
         }

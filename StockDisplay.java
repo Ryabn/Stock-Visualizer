@@ -7,9 +7,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class StockDisplay extends JPanel {
     private static ArrayList<String> stockList;
@@ -52,8 +50,6 @@ public class StockDisplay extends JPanel {
         jtfSearch = new AutocompleteSearch();
         jtfSearch.setBackground(Color.white);
 
-//        jpSideBar.add(jtfSearch, sideBarLayout.NORTH);
-
         jbStart = new JButton("Start");
 
         jbStart.setOpaque(true);
@@ -63,7 +59,6 @@ public class StockDisplay extends JPanel {
 
         jpSideBar.add(jpControlButtons, sideBarLayout.CENTER);
         jpSideBar.add(jtfSearch, sideBarLayout.SOUTH);
-
 
         jlStocks = new JList<>(new String[]{"MSFT", "AAPL"});
 
@@ -84,9 +79,12 @@ public class StockDisplay extends JPanel {
         jtfSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                jlStocks = new JList<>(jtfSearch.updateSuggestions(jtfSearch.getText()));
-                repaint();
-                System.out.println(jtfSearch.getText());
+                String[] newList = jtfSearch.updateSuggestions(jtfSearch.getText());
+                DefaultListModel model = new DefaultListModel();
+                for (int i = 0; i < newList.length; i++) {
+                    model.addElement(newList[i]);
+                }
+                jlStocks.setModel(model);
             }
         });
         jlStocks.addListSelectionListener(new ListSelectionListener() {
