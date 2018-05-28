@@ -29,7 +29,12 @@ public class AutocompleteSearch extends JTextField{
     }
     /**
      * Checks the entire map for its values and its keys to see if any of them match the user input
-     * It returns a maximum of 20 values so it doesn't choke up the ui
+     * It returns a maximum of 30 values so it doesn't choke up the ui
+     *
+     * Problem: Using tree maps since strings are comparable and should yield a faster search
+     * Will use 2 tree maps with the values and the keys mapping each other
+     * When searching, will go down left subtree and find the smallest value that is still equal to user input
+     * Then include values until it reaches the maximum value that has the user input
      *
      * @param userInput
      * @return
@@ -40,14 +45,14 @@ public class AutocompleteSearch extends JTextField{
         int len = userInput.length();
         ArrayList<String> suggestions = new ArrayList<>();
         for (Map.Entry<String, String> details : companyToSymbol.entrySet()){
-            if( !( details.getKey().length() < len ) && count1 <= 10){
+            if( !( details.getKey().length() < len ) && count1 <= 15){
                 if( details.getKey().substring(0, len).toLowerCase().equals(userInput.toLowerCase()) ){
                     suggestions.add(details.getValue() + " - " + details.getKey());
                     count1++;
                     continue;
                 }
             }
-            if( !( details.getValue().length() < len ) && count2 <= 10 ){
+            if( !( details.getValue().length() < len ) && count2 <= 15 ){
                 if( details.getValue().substring(0, len).toLowerCase().equals(userInput.toLowerCase()) ){
                     suggestions.add(details.getValue() + " - " + details.getKey());
                     count2++;

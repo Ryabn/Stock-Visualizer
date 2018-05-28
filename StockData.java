@@ -15,7 +15,6 @@ public class StockData extends JPanel {
     }
 
     public void createComponents(){
-
         BorderLayout layout = new BorderLayout();
         setLayout(layout);
 

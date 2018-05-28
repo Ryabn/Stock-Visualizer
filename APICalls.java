@@ -21,6 +21,7 @@ public class APICalls {
                 "&symbol=" + symbol +
                 "&interval=" + interval +
                 "&apikey=" + keys.getAlphaVantageApiKey();
+        System.out.println(url);
         return getReq(url);
     }
 
@@ -32,7 +33,6 @@ public class APICalls {
      * @throws Exception
      */
     private static String getReq(String url) throws Exception {
-
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");

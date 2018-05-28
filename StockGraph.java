@@ -25,7 +25,8 @@ public class StockGraph extends JPanel{
     }
 
     /**
-     * Called when a stock is selected. It sends the requested user info to StockParser.java and
+     * Called when a stock is selected. It sends the requested user info to StockParser.java
+     * Once graph data is analyzed, will repaint
      */
     public void displayStockGraph(String symbol){
         try {
@@ -55,6 +56,11 @@ public class StockGraph extends JPanel{
                 stockInnerPadding, stockRange );
     }
 
+    /**
+     * Overrides paint function
+     * When graph data is available, will plot graph and display
+     * @param g
+     */
     @Override
     public void paint(Graphics g){
         super.paint(g);
@@ -64,6 +70,10 @@ public class StockGraph extends JPanel{
         }
     }
 
+    /**
+     * Calculates the location of various points of stock prices
+     *
+     */
     public void calculateXPos(){
         int panelHeight = this.getHeight() - (GRAPH_OUTER_PADDING * 4);
         xPosList.clear();
@@ -72,6 +82,10 @@ public class StockGraph extends JPanel{
         }
     }
 
+    /**
+     * paints the graph with the data members set by the stock parser function
+     * @param g
+     */
     public void graphStock(Graphics g){
         int panelWidth = this.getWidth() - 40;
         int panelHeight = this.getHeight() - (GRAPH_OUTER_PADDING * 2);

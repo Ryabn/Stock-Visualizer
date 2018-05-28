@@ -7,12 +7,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class StockDisplay extends JPanel {
-    private static ArrayList<String> stockList;
     private JList<String> jlStocks;
 
     private JPanel jpSideBar;
@@ -26,6 +22,7 @@ public class StockDisplay extends JPanel {
         createComponents();
         wireComponents();
     }
+
     public void createComponents(){
         BorderLayout mainLayout = new BorderLayout();
         BorderLayout sideBarLayout = new BorderLayout(10, 0);
@@ -94,6 +91,10 @@ public class StockDisplay extends JPanel {
         });
     }
 
+    /**
+     * Updates the new list selection based on user input
+     * Called by list selection listener whenever user changes input
+     */
     public void newSearch(){
         String[] newList = jtfSearch.updateSuggestions(jtfSearch.getText());
         DefaultListModel model = new DefaultListModel();
@@ -102,6 +103,11 @@ public class StockDisplay extends JPanel {
         }
         jlStocks.setModel(model);
     }
+
+    /**
+     * Initializes the stock graph with selected stock
+     * @param symbol
+     */
     public void selectedStock(String symbol){
         jpStockVisualizer.displayStockGraph(symbol);
     }
