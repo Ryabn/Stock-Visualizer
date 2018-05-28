@@ -14,7 +14,7 @@ public class AutocompleteSearch extends JTextField{
     private TreeMap<String, String> companyToSymbol;
 
     public AutocompleteSearch(){
-        super();
+        super("Search Stock...");
         companyToSymbol = new TreeMap<>();
         loadAll();
     }

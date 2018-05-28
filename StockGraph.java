@@ -55,8 +55,6 @@ public class StockGraph extends JPanel{
                 stockInnerPadding, stockRange );
     }
 
-//    public void
-
     @Override
     public void paint(Graphics g){
         super.paint(g);

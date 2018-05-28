@@ -15,10 +15,8 @@ public class StockDisplay extends JPanel {
     private static ArrayList<String> stockList;
     private JList<String> jlStocks;
 
-    private JPanel jpControlButtons;
     private JPanel jpSideBar;
-
-    private JButton jbStart;
+    private JScrollPane jspStocks;
 
     private StockData jpStockVisualizer;
     private AutocompleteSearch jtfSearch;
@@ -30,8 +28,7 @@ public class StockDisplay extends JPanel {
     }
     public void createComponents(){
         BorderLayout mainLayout = new BorderLayout();
-        BorderLayout sideBarLayout = new BorderLayout(10, 30);
-        GridLayout visualizerControls = new GridLayout(3, 3, 5, 10);
+        BorderLayout sideBarLayout = new BorderLayout(10, 0);
 
         setLayout(mainLayout);
 
@@ -45,34 +42,22 @@ public class StockDisplay extends JPanel {
         jpSideBar.setBackground(new Color(25, 31, 43));
         jpSideBar.setLayout(sideBarLayout);
 
-        jpControlButtons = new JPanel();
-        jpControlButtons.setBackground(new Color(25, 31, 43));
-        jpControlButtons.setLayout(visualizerControls);
-
         jtfSearch = new AutocompleteSearch();
         jtfSearch.setBackground(Color.white);
 
-        jbStart = new JButton("Start");
-
-        jbStart.setOpaque(true);
-        jbStart.setBackground(new Color(84, 216, 99));
-
-        jpControlButtons.add(jbStart);
-
-        jpSideBar.add(jpControlButtons, sideBarLayout.CENTER);
-        jpSideBar.add(jtfSearch, sideBarLayout.SOUTH);
+        jpSideBar.add(jtfSearch, sideBarLayout.NORTH);
 
         jlStocks = new JList<>();
-        JScrollPane jspStocks = new JScrollPane(jlStocks);
+        jspStocks = new JScrollPane(jlStocks);
 
         jlStocks.setBorder(new EmptyBorder(5,10, 10, 10));
         jlStocks.setBackground(new Color(77, 92, 122));
         jlStocks.setForeground(new Color(255, 255, 255));
         jlStocks.setLayoutOrientation(JList.VERTICAL);
 
-        jlStocks.setFixedCellHeight(30);
-        jlStocks.setPreferredSize(new Dimension(400, 700));
-        jpSideBar.add(jspStocks, sideBarLayout.NORTH);
+        jlStocks.setFixedCellHeight(20);
+        jlStocks.setFixedCellWidth(300);
+        jpSideBar.add(jspStocks, sideBarLayout.CENTER);
 
         add(jpSideBar, mainLayout.EAST);
         setBackground(new Color(25, 31, 43));
@@ -85,15 +70,12 @@ public class StockDisplay extends JPanel {
             public void insertUpdate(DocumentEvent e) {
                 newSearch();
             }
-
             @Override
             public void removeUpdate(DocumentEvent e) {
                 newSearch();
             }
-
             @Override
             public void changedUpdate(DocumentEvent e) {
-                newSearch();
             }
         });
         jlStocks.addListSelectionListener(new ListSelectionListener() {
@@ -101,21 +83,13 @@ public class StockDisplay extends JPanel {
             public void valueChanged(ListSelectionEvent e) {
                 if(!e.getValueIsAdjusting()){
                     String name = jlStocks.getSelectedValue();
-                    System.out.print(name);
                     for(int i = 0; i < name.length(); i++){
                         if(name.charAt(i) == ' '){
                             selectedStock(name.substring(0, i));
                             break;
                         }
                     }
-                    selectedStock(jlStocks.getSelectedValue());
                 }
-            }
-        });
-        jbStart.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                selectedStock();
             }
         });
     }
