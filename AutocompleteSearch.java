@@ -19,10 +19,14 @@ public class AutocompleteSearch extends JTextField{
         loadAll();
     }
 
+    /**
+     * Sends user data to be analyzed and returns a string array for the list to parse
+     * @param userInput
+     * @return
+     */
     public String[] updateSuggestions(String userInput){
         return getSameStart(userInput).toArray(new String[0]);
     }
-
     /**
      * Checks the entire map for its values and its keys to see if any of them match the user input
      * It returns a maximum of 20 values so it doesn't choke up the ui
@@ -38,7 +42,7 @@ public class AutocompleteSearch extends JTextField{
         for (Map.Entry<String, String> details : companyToSymbol.entrySet()){
             if( !( details.getKey().length() < len ) && count1 <= 10){
                 if( details.getKey().substring(0, len).toLowerCase().equals(userInput.toLowerCase()) ){
-                    suggestions.add(details.getKey() + " - " + details.getValue());
+                    suggestions.add(details.getValue() + " - " + details.getKey());
                     count1++;
                     continue;
                 }
@@ -90,6 +94,10 @@ public class AutocompleteSearch extends JTextField{
         }
     }
 
+    /**
+     * Loads both nasdaq and nyse stocks into the program
+     *
+     */
     public void loadAll(){
         File listFile = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList.txt");
         File listFile2 = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList2.txt");

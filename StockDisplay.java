@@ -2,6 +2,8 @@ package tech.ryanqyang;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -60,15 +62,17 @@ public class StockDisplay extends JPanel {
         jpSideBar.add(jpControlButtons, sideBarLayout.CENTER);
         jpSideBar.add(jtfSearch, sideBarLayout.SOUTH);
 
-        jlStocks = new JList<>(new String[]{"MSFT", "AAPL"});
+        jlStocks = new JList<>();
+        JScrollPane jspStocks = new JScrollPane(jlStocks);
 
-        jlStocks.setBorder(new EmptyBorder(10,30, 10, 30));
+        jlStocks.setBorder(new EmptyBorder(5,10, 10, 10));
         jlStocks.setBackground(new Color(77, 92, 122));
         jlStocks.setForeground(new Color(255, 255, 255));
         jlStocks.setLayoutOrientation(JList.VERTICAL);
 
         jlStocks.setFixedCellHeight(30);
-        jpSideBar.add(jlStocks, sideBarLayout.NORTH);
+        jlStocks.setPreferredSize(new Dimension(400, 700));
+        jpSideBar.add(jspStocks, sideBarLayout.NORTH);
 
         add(jpSideBar, mainLayout.EAST);
         setBackground(new Color(25, 31, 43));
@@ -76,15 +80,20 @@ public class StockDisplay extends JPanel {
     }
 
     public void wireComponents(){
-        jtfSearch.addActionListener(new ActionListener() {
+        jtfSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String[] newList = jtfSearch.updateSuggestions(jtfSearch.getText());
-                DefaultListModel model = new DefaultListModel();
-                for (int i = 0; i < newList.length; i++) {
-                    model.addElement(newList[i]);
-                }
-                jlStocks.setModel(model);
+            public void insertUpdate(DocumentEvent e) {
+                newSearch();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                newSearch();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                newSearch();
             }
         });
         jlStocks.addListSelectionListener(new ListSelectionListener() {
@@ -109,6 +118,15 @@ public class StockDisplay extends JPanel {
 //                selectedStock();
             }
         });
+    }
+
+    public void newSearch(){
+        String[] newList = jtfSearch.updateSuggestions(jtfSearch.getText());
+        DefaultListModel model = new DefaultListModel();
+        for (int i = 0; i < newList.length; i++) {
+            model.addElement(newList[i]);
+        }
+        jlStocks.setModel(model);
     }
     public void selectedStock(String symbol){
         jpStockVisualizer.displayStockGraph(symbol);
