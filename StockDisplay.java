@@ -53,7 +53,7 @@ public class StockDisplay extends JPanel {
         jlStocks.setLayoutOrientation(JList.VERTICAL);
 
         jlStocks.setFixedCellHeight(20);
-        jlStocks.setFixedCellWidth(300);
+        jlStocks.setFixedCellWidth(180);
         jpSideBar.add(jspStocks, sideBarLayout.CENTER);
 
         add(jpSideBar, mainLayout.EAST);

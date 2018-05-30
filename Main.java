@@ -9,10 +9,11 @@ public class Main {
         StockDisplay stockDisplay = new StockDisplay();
         frame.setTitle("Stock Visualizer");
         frame.setPreferredSize(new Dimension(850, 450));
-        frame.setMinimumSize(new Dimension(700, 380));
+        frame.setMinimumSize(new Dimension(950, 540));
         frame.add(stockDisplay);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+
 }
