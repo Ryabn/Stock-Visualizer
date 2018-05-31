@@ -1,7 +1,10 @@
 package tech.ryanqyang;
 
 import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -9,7 +12,7 @@ public class StockParser {
 
     private ArrayList<Double> priceList;
     private ArrayList<String> intervalList;
-    private JsonObject metaData;
+    private JsonArray metaData;
 
     private double stockHigh;
     private double stockLow;
@@ -17,12 +20,12 @@ public class StockParser {
     public ArrayList<Double> getPriceList() {
         return priceList;
     }
-    public ArrayList<String> getIntervalList() {
-        return intervalList;
-    }
-    public JsonObject getMetaData() {
-        return metaData;
-    }
+//    public ArrayList<String> getIntervalList() {
+//        return intervalList;
+//    }
+//    public JsonObject getMetaData() {
+//        return metaData;
+//    }
     public double getStockHigh() {
         return stockHigh;
     }
@@ -56,28 +59,39 @@ public class StockParser {
     public void extractPrices(JsonObject value){
         priceList.clear();
         intervalList.clear();
+//        for (JsonObject.Member member : value) {
+//            String name = member.getName();
+//            if(name.equals("Meta Data")){
+//                metaData = member.getValue().asObject();
+//            }else{
+//                value = member.getValue().asObject();
+//                break;
+//            }
+//        }
+//        for(JsonObject.Member key : value.asObject()){
+//            Double stockValueAt =
+//                    Double.parseDouble(
+//                            key
+//                                    .getValue()
+//                                    .asObject()
+//                                    .getString("4. close", "0")
+//                    );
+//            String intervalAt = key.getName();
+//            intervalList.add(intervalAt);
+//            priceList.add(stockValueAt);
+//        }
+
+
         for (JsonObject.Member member : value) {
             String name = member.getName();
-            if(name.equals("Meta Data")){
-                metaData = member.getValue().asObject();
-            }else{
-                value = member.getValue().asObject();
-                break;
+            if(name.equals("chart")){
+                metaData = member.getValue().asArray();
             }
         }
-        for(JsonObject.Member key : value.asObject()){
-            Double stockValueAt =
-                    Double.parseDouble(
-                            key
-                                    .getValue()
-                                    .asObject()
-                                    .getString("4. close", "0")
-                    );
-            String intervalAt = key.getName();
-            intervalList.add(intervalAt);
-            priceList.add(stockValueAt);
+        for(JsonValue key : metaData){
+            priceList.add(key.asObject().getDouble("high", 0.0));
         }
-        stockHigh = Collections.max(priceList);
-        stockLow = Collections.min(priceList);
+//        stockHigh = Collections.max(priceList);
+//        stockLow = Collections.min(priceList);
     }
 }

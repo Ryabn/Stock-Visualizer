@@ -34,10 +34,10 @@ public class StockData extends JPanel {
     public void displayStockGraph(String symbol){
         graph.displayStockGraph(symbol);
 
-        String labelText = graph.getStockInfo().getMetaData().asObject().get("2. Symbol").asString()
-                + " \t $" + graph.getStockInfo().getPriceList().get(0);
+//        String labelText = graph.getStockInfo().getMetaData().asObject().get("2. Symbol").asString()
+//                + " \t $" + graph.getStockInfo().getPriceList().get(0);
 
-        jlStockDescription.setText(labelText);
+//        jlStockDescription.setText(labelText);
         jlStockDescription.setFont(new Font(jlStockDescription.getName(), Font.BOLD, 30));
         jlStockDescription.setForeground(Color.WHITE);
     }

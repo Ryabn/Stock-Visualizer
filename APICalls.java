@@ -22,7 +22,10 @@ public class APICalls {
                 "&interval=" + interval +
                 "&apikey=" + keys.getAlphaVantageApiKey();
         System.out.println(url);
-        return getReq(url);
+//        https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=10
+        String url2 = "https://api.iextrading.com/1.0/stock/" + symbol +
+                "/batch?types=quote,news,chart&range=1m&last=10";
+        return getReq(url2);
     }
 
     /**
