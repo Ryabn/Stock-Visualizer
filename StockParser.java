@@ -6,13 +6,13 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class StockParser {
 
     private ArrayList<Double> priceList;
     private ArrayList<String> intervalList;
     private JsonArray metaData;
+    private String symbolName;
 
     private double stockHigh;
     private double stockLow;
@@ -26,6 +26,10 @@ public class StockParser {
 //    public JsonObject getMetaData() {
 //        return metaData;
 //    }
+
+    public String getSymbolName() {
+        return symbolName;
+    }
     public double getStockHigh() {
         return stockHigh;
     }
@@ -34,6 +38,7 @@ public class StockParser {
     }
 
     public StockParser( String timeSeries, String symbol, String interval ) throws Exception{
+        this.symbolName = symbol;
         this.priceList = new ArrayList<>();
         this.intervalList = new ArrayList<>();
         displayStockInfo(timeSeries, symbol, interval);
@@ -89,7 +94,10 @@ public class StockParser {
             }
         }
         for(JsonValue key : metaData){
-            priceList.add(key.asObject().getDouble("high", 0.0));
+            double val = key.asObject().getDouble("high", -1);
+            if(val >= 0.0){
+                priceList.add(val);
+            }
         }
 //        stockHigh = Collections.max(priceList);
 //        stockLow = Collections.min(priceList);
