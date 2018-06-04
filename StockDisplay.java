@@ -13,6 +13,7 @@ public class StockDisplay extends JPanel {
 
     private JPanel jpSideBar;
     private JScrollPane jspStocks;
+    private StockPortfolio jpPortfolio;
 
     private StockData jpStockVisualizer;
     private AutocompleteSearch jtfSearch;
@@ -33,6 +34,9 @@ public class StockDisplay extends JPanel {
         jpStockVisualizer.setBackground(new Color(25, 31, 43));
         jpStockVisualizer.setForeground(Color.white);
         add(jpStockVisualizer, mainLayout.CENTER);
+
+        jpPortfolio = new StockPortfolio();
+        add(jpPortfolio, mainLayout.SOUTH);
 
         jpSideBar = new JPanel();
         jpSideBar.setBorder(new EmptyBorder(20,0, 40, 0));

@@ -21,7 +21,6 @@ public class APICalls {
                 "&symbol=" + symbol +
                 "&interval=" + interval +
                 "&apikey=" + keys.getAlphaVantageApiKey();
-        System.out.println(url);
 //        https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=10
         String url2 = "https://api.iextrading.com/1.0/stock/" + symbol +
                 "/batch?types=chart&range=1d&last=10";
