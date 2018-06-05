@@ -6,6 +6,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.title.Title;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
 
@@ -34,7 +35,7 @@ public class StockGraph extends JPanel{
         chart = ChartFactory.createXYLineChart("Select a Stock",
                 "Value", "Time", ds, PlotOrientation.HORIZONTAL, false, true,
                 false);
-
+        setChartProperties();
         cp = new ChartPanel(chart);
         add(cp);
     }
@@ -52,6 +53,17 @@ public class StockGraph extends JPanel{
             e.printStackTrace();
         }
     }
+    private void setChartProperties(){
+        chart.setBackgroundPaint(new Color(25, 31, 43));
+        chart.setBorderPaint(new Color(25, 31, 43));
+        chart.getTitle().setPaint(Color.white);
+        chart.getXYPlot().setDomainGridlinePaint(Color.blue);
+        chart.getXYPlot().setRangeGridlinePaint(Color.blue);
+        chart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.white);
+        chart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.white);
+        chart.getPlot().setOutlinePaint(new Color(150, 0, 250));
+        chart.getXYPlot().getRenderer().setBasePaint(new Color(150, 0, 250));
+    }
 
     /**
      * Removes the old chart and shows the newest chart
@@ -60,14 +72,14 @@ public class StockGraph extends JPanel{
      */
     private void refreshChart(StockParser stockParser) {
         XYDataset ds = createDataset(stockInfo);
-
         removeAll();
         revalidate(); // This removes the old chart
-        chart = chart = ChartFactory.createXYLineChart("Stock Price",
+        chart = ChartFactory.createXYLineChart("Stock Price",
                 "Value", "Time", ds, PlotOrientation.HORIZONTAL, false, true,
                 false);
-        cp = new ChartPanel(chart);
 
+        setChartProperties();
+        cp = new ChartPanel(chart);
         add(cp);
         repaint(); // This method makes the new chart appear
     }
