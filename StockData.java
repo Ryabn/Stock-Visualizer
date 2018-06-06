@@ -19,7 +19,9 @@ public class StockData extends JPanel {
         setLayout(layout);
 
         setBorder(new EmptyBorder(20, 0,0 ,0));
-        jlStockDescription = new JLabel("", SwingConstants.CENTER);
+        jlStockDescription = new JLabel("Stock Portfolio Organizer", SwingConstants.CENTER);
+        jlStockDescription.setFont(new Font(jlStockDescription.getName(), Font.BOLD, 30));
+        jlStockDescription.setForeground(Color.WHITE);
         add(jlStockDescription, BorderLayout.NORTH);
 
         graph = new StockGraph();
@@ -33,12 +35,5 @@ public class StockData extends JPanel {
 
     public void displayStockGraph(String symbol){
         graph.displayStockGraph(symbol);
-
-        String labelText = graph.getStockInfo().getSymbolName()
-                + " \t $" + graph.getStockInfo().getPriceList().get(0);
-
-        jlStockDescription.setText(labelText);
-        jlStockDescription.setFont(new Font(jlStockDescription.getName(), Font.BOLD, 30));
-        jlStockDescription.setForeground(Color.WHITE);
     }
 }

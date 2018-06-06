@@ -1,29 +1,29 @@
 package tech.ryanqyang;
 
-import javafx.scene.chart.Chart;
-import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.*;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.title.Title;
+import org.jfree.chart.renderer.category.StatisticalLineAndShapeRenderer;
+import org.jfree.data.Range;
+import org.jfree.data.statistics.DefaultStatisticalCategoryDataset;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.ui.RectangleInsets;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.ColorModel;
+import java.text.AttributedString;
 import java.util.ArrayList;
-
-import static org.jfree.chart.ChartColor.DARK_RED;
 
 public class StockGraph extends JPanel{
     private StockParser stockInfo;
     private JFreeChart chart;
     private ChartPanel cp;
-
+    private static TickUnits timeTicks;
     public StockParser getStockInfo() {
         return stockInfo;
     }
@@ -35,7 +35,7 @@ public class StockGraph extends JPanel{
         chart = ChartFactory.createXYLineChart("Select a Stock",
                 "Value", "Time", ds, PlotOrientation.HORIZONTAL, false, true,
                 false);
-        setChartProperties();
+//        setChartProperties();
         cp = new ChartPanel(chart);
         add(cp);
     }
@@ -57,13 +57,18 @@ public class StockGraph extends JPanel{
         chart.setBackgroundPaint(new Color(25, 31, 43));
         chart.setBorderPaint(new Color(25, 31, 43));
         chart.getTitle().setPaint(Color.white);
-        chart.getXYPlot().setDomainGridlinePaint(Color.blue);
-        chart.getXYPlot().setRangeGridlinePaint(Color.blue);
-        chart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.white);
-        chart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.white);
+//        chart.getXYPlot().setDomainGridlinePaint(new Color(25, 31, 43));
+//        chart.getXYPlot().setRangeGridlinePaint(Color.white);
+        chart.getCategoryPlot().getDomainAxis().setTickLabelPaint(Color.white);
+        chart.getCategoryPlot().getRangeAxis().setTickLabelPaint(Color.white);
         chart.getPlot().setOutlinePaint(new Color(150, 0, 250));
-        chart.getXYPlot().getRenderer().setBasePaint(new Color(150, 0, 250));
+        chart.getCategoryPlot().getRenderer().setBasePaint(new Color(150, 0, 250));
+        chart.getPlot().setBackgroundPaint(new Color(25, 31, 43));
+        chart.getCategoryPlot().getDomainAxis().setCategoryLabelPositionOffset(5);
+        chart.getCategoryPlot().
+        chart.getCategoryPlot().getDomainAxis().setTickLabelFont(new Font( "label", 0, 13));
     }
+
 
     /**
      * Removes the old chart and shows the newest chart
@@ -71,14 +76,34 @@ public class StockGraph extends JPanel{
      * @param stockParser
      */
     private void refreshChart(StockParser stockParser) {
-        XYDataset ds = createDataset(stockInfo);
+//        XYDataset ds = createDataset(stockInfo);
+        DefaultStatisticalCategoryDataset ds = createTimeSet(stockInfo);
+
         removeAll();
         revalidate(); // This removes the old chart
-        chart = ChartFactory.createXYLineChart("Stock Price",
-                "Value", "Time", ds, PlotOrientation.HORIZONTAL, false, true,
-                false);
+        CategoryAxis domain = new CategoryAxis();
 
+        ValueAxis range = new NumberAxis();
+//        range.setLowerMargin(stockParser.getStockLow());
+//        range.setUpperMargin(stockParser.getStockHigh());
+//        System.out.println(stockParser.getStockLow() + " " + stockParser.getStockHigh());
+        domain.setVisible(true);
+        range.setRange(stockParser.getStockLow(), stockParser.getStockHigh());
+        StatisticalLineAndShapeRenderer renderer
+                = new StatisticalLineAndShapeRenderer(true, false);
+        CategoryPlot plot = new CategoryPlot(ds, domain, range, renderer);
+        chart = new JFreeChart(
+                stockParser.getSymbolName()
+                        + " - " + stockParser.getPriceList().get(stockParser.getPriceList().size() - 1), JFreeChart.DEFAULT_TITLE_FONT, plot, false);
+//        chart = ChartFactory.createXYLineChart(stockParser.getSymbolName()
+//                        + " - " + stockParser.getPriceList().get(stockParser.getPriceList().size() - 1),
+//                null, "Time", ds, PlotOrientation.HORIZONTAL, false, true,
+//                false);
         setChartProperties();
+//        chart.getCategoryPlot().
+//        chart.getXYPlot().getRangeAxis().setTickLabelsVisible(false);
+//        chart.getXYPlot().getRangeAxis().setTickLabelsVisible(false);
+//        chart.getXYPlot().getRenderer().setSeriesPaint(0, new Color(150, 0, 250));
         cp = new ChartPanel(chart);
         add(cp);
         repaint(); // This method makes the new chart appear
@@ -92,23 +117,51 @@ public class StockGraph extends JPanel{
     private static XYDataset createDataset(StockParser spInfo) {
         DefaultXYDataset ds = new DefaultXYDataset();
         ArrayList<Double> spPrices = spInfo.getPriceList();
+        ArrayList<String> spIntervals = spInfo.getIntervalList();
 
         double[] prices = new double[ spPrices.size() ];
 
         double[] interval = new double[ spPrices.size() ];
 
+
         for(int i = 0; i < spPrices.size(); i++){
             prices[i] = spPrices.get(i);
             interval[i] = i;
+
         }
 
         double[][] data = { prices, interval };
-
         ds.addSeries("Stock", data);
 
         return ds;
     }
+
+    private static DefaultStatisticalCategoryDataset createTimeSet(StockParser spInfo) {
+        DefaultXYDataset ds = new DefaultXYDataset();
+        ArrayList<Double> spPrices = spInfo.getPriceList();
+        ArrayList<String> spIntervals = spInfo.getIntervalList();
+
+        DefaultStatisticalCategoryDataset dataset
+                = new DefaultStatisticalCategoryDataset();
+
+
+        for(int i = 0; i < spPrices.size(); i++){
+            if(spPrices.get(i) > 0) {
+                if(i%35 == 0){
+                    dataset.add((double) spPrices.get(i), 0, "series", spIntervals.get(i));
+
+                }else{
+                    dataset.add((double) spPrices.get(i), 0, "series", " ");
+                }
+
+            }
+        }
+
+        return dataset;
+    }
 //    /**
+//    /**
+
 //     * Calculate the intervals/axis of the stock graph by calculating the difference between the stocks
 //     * highest and the lowest and making the lowerbound 10% of the difference and the upped bound 10% of the different
 //     */
