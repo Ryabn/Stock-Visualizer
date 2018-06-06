@@ -7,12 +7,15 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class StockDisplay extends JPanel {
     private JList<String> jlStocks;
 
     private JPanel jpSideBar;
     private JScrollPane jspStocks;
+
     private StockPortfolio jpPortfolio;
 
     private StockData jpStockVisualizer;
@@ -35,9 +38,6 @@ public class StockDisplay extends JPanel {
         jpStockVisualizer.setForeground(Color.white);
         add(jpStockVisualizer, mainLayout.CENTER);
 
-        jpPortfolio = new StockPortfolio();
-        add(jpPortfolio, mainLayout.SOUTH);
-
         jpSideBar = new JPanel();
         jpSideBar.setBorder(new EmptyBorder(20,0, 40, 0));
         jpSideBar.setBackground(new Color(25, 31, 43));
@@ -59,6 +59,9 @@ public class StockDisplay extends JPanel {
         jlStocks.setFixedCellHeight(20);
         jlStocks.setFixedCellWidth(180);
         jpSideBar.add(jspStocks, sideBarLayout.CENTER);
+
+        jpPortfolio = new StockPortfolio();
+        add(jpPortfolio, sideBarLayout.SOUTH);
 
         add(jpSideBar, mainLayout.EAST);
         setBackground(new Color(25, 31, 43));

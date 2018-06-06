@@ -24,18 +24,9 @@ public class StockParser {
     public ArrayList<String> getIntervalList() {
         return intervalList;
     }
-//    public JsonObject getMetaData() {
-//        return metaData;
-//    }
 
     public String getSymbolName() {
         return symbolName;
-    }
-    public double getStockHigh() {
-        return stockHigh;
-    }
-    public double getStockLow() {
-        return stockLow;
     }
 
     public StockParser( String timeSeries, String symbol, String interval ) throws Exception{
@@ -95,7 +86,7 @@ public class StockParser {
             }
         }
         for(JsonValue key : metaData){
-            String label =  key.asObject().getString("label", "");
+            String label =  key.asObject().getString("minute", "");
             double val = key.asObject().getDouble("high", -1);
             if(val >= 0.0){
                 priceList.add(val);
