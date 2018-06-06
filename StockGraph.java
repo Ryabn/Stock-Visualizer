@@ -71,6 +71,10 @@ public class StockGraph extends JPanel{
             e.printStackTrace();
         }
     }
+
+    /**
+     * Sets chart Properties every time new chart is created
+     */
     private void setChartProperties(){
         chart.setBackgroundPaint(new Color(25, 31, 43));
         chart.setBorderPaint(new Color(25, 31, 43));

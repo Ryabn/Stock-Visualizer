@@ -9,6 +9,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class StockPortfolio extends JPanel{
@@ -22,9 +24,6 @@ public class StockPortfolio extends JPanel{
     private JTextField jtfShareCount;
     private JTextField jtfShareValue;
 
-    private JPanel jlUIValue;
-
-    private JLabel jlValue;
     private static JLabel jlPortfolioStats;
     private static JLabel jlInvested;
     private static JLabel jlWorth;
@@ -33,8 +32,8 @@ public class StockPortfolio extends JPanel{
 
     public StockPortfolio(){
         super();
-        readFile();
         createComponents();
+        readFile();
         wireComponents();
     }
     private void createComponents(){
@@ -50,11 +49,9 @@ public class StockPortfolio extends JPanel{
         jpControls.setBackground(new Color(25, 31, 43));
         add(jpControls, borderLayout.CENTER);
 
-
         jtfShareCount = new JTextField("Amount");
 
         jtfShareValue = new JTextField("Price");
-
 
         jlSharesOwned = new JLabel("Stocks Owned: 0");
         jlSharesOwned.setForeground(Color.white);
@@ -86,7 +83,10 @@ public class StockPortfolio extends JPanel{
 
     private void addStocks(){
         int amountBought = Integer.parseInt(jtfShareCount.getText());
+        curAmount += amountBought;
         int priceAt = Integer.parseInt(jtfShareValue.getText());
+        curSpent += (priceAt*amountBought);
+        writeFile();
     }
     public static void readFile(){
         File f = new File("src/parsed/userPortfolio.txt");
@@ -96,7 +96,9 @@ public class StockPortfolio extends JPanel{
             curSpent = 0;
             jlPortfolioStats.setText("0%");
             while (sc.hasNextLine()){
-                if(sc.next().equals(StockGraph.getStockInfo().getSymbolName())){
+                String temp = sc.next();
+                if(temp.equals(StockGraph.getStockInfo().getSymbolName())){
+                    curSymbol = temp;
                     curAmount = Integer.parseInt(sc.next());
                     curSpent = Double.parseDouble(sc.next());
                     break;
@@ -124,10 +126,28 @@ public class StockPortfolio extends JPanel{
     }
     private void writeFile(){
         File f = new File("src/parsed/userPortfolio.txt");
-        try(PrintWriter pr = new PrintWriter(f)){
-
-        }catch(Exception e){
-
+        File f2 = new File("src/parsed/workingFile.txt");
+        String complete = "";
+        Boolean added = false;
+        try (PrintWriter pr = new PrintWriter(f)) {
+            try (PrintWriter pr2 = new PrintWriter(f2)) {
+                try(Scanner sc = new Scanner(f)){
+                    while(sc.hasNextLine()){
+                        String tempLine = sc.nextLine();
+                        if(tempLine.substring(0, curSymbol.length()).equals(curSymbol)){
+                            tempLine = curSymbol + " " + curAmount + " " + curSpent;
+                            added = true;
+                        }
+                        complete += tempLine + "\n";
+                    }
+                    if(!added){
+                        complete +=  curSymbol + " " + curAmount + " " + curSpent;
+                    }
+                    pr.print(complete);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

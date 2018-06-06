@@ -56,28 +56,6 @@ public class StockParser {
     public void extractPrices(JsonObject value){
         priceList.clear();
         intervalList.clear();
-//        for (JsonObject.Member member : value) {
-//            String name = member.getName();
-//            if(name.equals("Meta Data")){
-//                metaData = member.getValue().asObject();
-//            }else{
-//                value = member.getValue().asObject();
-//                break;
-//            }
-//        }
-//        for(JsonObject.Member key : value.asObject()){
-//            Double stockValueAt =
-//                    Double.parseDouble(
-//                            key
-//                                    .getValue()
-//                                    .asObject()
-//                                    .getString("4. close", "0")
-//                    );
-//            String intervalAt = key.getName();
-//            intervalList.add(intervalAt);
-//            priceList.add(stockValueAt);
-//        }
-
 
         for (JsonObject.Member member : value) {
             String name = member.getName();
@@ -95,5 +73,33 @@ public class StockParser {
         }
         stockHigh = Collections.max(priceList);
         stockLow = Collections.min(priceList);
+    }
+
+    /**
+     * JSON parsing for AlphaVantage.co format
+     * @param value
+     */
+    public void extractBackup(JsonObject value){
+        for (JsonObject.Member member : value) {
+            String name = member.getName();
+            if(name.equals("Meta Data")){
+//                metaData = member.getValue().asObject();
+            }else{
+                value = member.getValue().asObject();
+                break;
+            }
+        }
+        for(JsonObject.Member key : value.asObject()){
+            Double stockValueAt =
+                    Double.parseDouble(
+                            key
+                                    .getValue()
+                                    .asObject()
+                                    .getString("4. close", "0")
+                    );
+            String intervalAt = key.getName();
+            intervalList.add(intervalAt);
+            priceList.add(stockValueAt);
+        }
     }
 }
