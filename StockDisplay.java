@@ -90,6 +90,7 @@ public class StockDisplay extends JPanel {
                     for(int i = 0; i < name.length(); i++){
                         if(name.charAt(i) == ' '){
                             selectedStock(name.substring(0, i));
+                            StockPortfolio.readFile();
                             break;
                         }
                     }

@@ -68,7 +68,6 @@ public class StockGraph extends JPanel{
             refreshChart(stockInfo);
         }catch(Exception e) {
             System.err.println("The requested API call could not be made");
-            e.printStackTrace();
         }
     }
 
@@ -95,7 +94,6 @@ public class StockGraph extends JPanel{
      */
     private void refreshChart(StockParser stockParser) {
         TimeSeries ds = createDataset(stockInfo);
-
         removeAll();
         revalidate(); // This removes the old chart
 
@@ -113,8 +111,8 @@ public class StockGraph extends JPanel{
         cp = new ChartPanel(chart);
         cp.setPreferredSize(new Dimension((int)(getWidth()*0.95), (int) (getHeight()* 0.92)));
         add(cp);
-        StockPortfolio.readFile();
         repaint(); // This method makes the new chart appear
+        StockPortfolio.readFile();
     }
 
     /**

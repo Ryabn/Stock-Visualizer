@@ -84,71 +84,85 @@ public class StockPortfolio extends JPanel{
     private void addStocks(){
         int amountBought = Integer.parseInt(jtfShareCount.getText());
         curAmount += amountBought;
-        int priceAt = Integer.parseInt(jtfShareValue.getText());
+        double priceAt = Double.parseDouble(jtfShareValue.getText());
         curSpent += (priceAt*amountBought);
         writeFile();
+        readFile();
     }
     public static void readFile(){
-        File f = new File("src/parsed/userPortfolio.txt");
-        try(Scanner sc = new Scanner(f)){
-            invested = Double.parseDouble(sc.nextLine());
-            curAmount = 0;
-            curSpent = 0;
-            jlPortfolioStats.setText("0%");
-            while (sc.hasNextLine()){
-                String temp = sc.next();
-                if(temp.equals(StockGraph.getStockInfo().getSymbolName())){
-                    curSymbol = temp;
-                    curAmount = Integer.parseInt(sc.next());
-                    curSpent = Double.parseDouble(sc.next());
-                    break;
-                }else{
-                    sc.next();
-                    sc.next();
-                    continue;
+        try {
+            String s = StockGraph.getStockInfo().getSymbolName();
+            curSymbol = s;
+            File f = new File("src/parsed/userPortfolio.txt");
+            Boolean done = false;
+            try(Scanner sc = new Scanner(f)){
+                invested = Double.parseDouble(sc.nextLine());
+                curAmount = 0;
+                curSpent = 0;
+                jlPortfolioStats.setText("0%");
+                while (sc.hasNextLine()){
+                    String temp = sc.next();
+                    if(temp.equals(StockGraph.getStockInfo().getSymbolName())){
+                        curSymbol = temp;
+                        curAmount = Integer.parseInt(sc.next());
+                        curSpent = Double.parseDouble(sc.next());
+                        done = true;
+                        break;
+                    }else{
+                        sc.next();
+                        sc.next();
+                        continue;
+                    }
                 }
+                if(!done){
+                    System.out.println(curSymbol);
+                    jlSharesOwned.setText("Stocks Owned: 0");
+                    jlInvested.setText("Total Invested: $0");
+                    jlWorth.setText("Total Value: $0");
+                }
+                jlSharesOwned.setText("Stocks Owned: " + curAmount);
+                jlInvested.setText("Total Invested: $" + curSpent);
+                double currentValueWorth = (curAmount * StockGraph.getStockInfo().getPriceList().get(StockGraph.getStockInfo().getPriceList().size()-1));
+                jlWorth.setText("Total Value: $" + currentValueWorth);
+                double percent = currentValueWorth/curSpent;
+                jlPortfolioStats.setText( String.valueOf(percent).substring(0, 5) + "%");
+                if(percent > 1){
+                    jlPortfolioStats.setForeground(Color.GREEN);
+                }else{
+                    jlPortfolioStats.setForeground(Color.RED);
+                }
+            }catch(Exception e){
             }
-            jlSharesOwned.setText("Stocks Owned: " + curAmount);
-            jlInvested.setText("Total Invested: $" + curSpent);
-            double currentValueWorth = (curAmount * StockGraph.getStockInfo().getPriceList().get(StockGraph.getStockInfo().getPriceList().size()-1));
-            jlWorth.setText("Total Value: $" + currentValueWorth);
-            double percent = currentValueWorth/curSpent;
-            jlPortfolioStats.setText( String.valueOf(percent).substring(0, 5) + "%");
-            if(percent > 1){
-                jlPortfolioStats.setForeground(Color.GREEN);
-            }else{
-                jlPortfolioStats.setForeground(Color.RED);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(NullPointerException e){
+            jlSharesOwned.setText("Stocks Owned: 0");
+            jlInvested.setText("Total Invested: $0");
         }
+
 
     }
     private void writeFile(){
         File f = new File("src/parsed/userPortfolio.txt");
-        File f2 = new File("src/parsed/workingFile.txt");
         String complete = "";
         Boolean added = false;
-        try (PrintWriter pr = new PrintWriter(f)) {
-            try (PrintWriter pr2 = new PrintWriter(f2)) {
-                try(Scanner sc = new Scanner(f)){
-                    while(sc.hasNextLine()){
-                        String tempLine = sc.nextLine();
-                        if(tempLine.substring(0, curSymbol.length()).equals(curSymbol)){
-                            tempLine = curSymbol + " " + curAmount + " " + curSpent;
-                            added = true;
-                        }
-                        complete += tempLine + "\n";
-                    }
-                    if(!added){
-                        complete +=  curSymbol + " " + curAmount + " " + curSpent;
-                    }
-                    pr.print(complete);
+
+        try(Scanner sc = new Scanner(f)) {
+            complete += sc.nextLine() + "\n";
+            while (sc.hasNextLine()) {
+                String tempLine = sc.nextLine();
+                if (tempLine.substring(0, curSymbol.length()).equals(curSymbol)) {
+                    tempLine = curSymbol + " " + curAmount + " " + curSpent;
+                    added = true;
                 }
+                complete += tempLine + "\n";
+            }
+            if (!added) {
+                complete += curSymbol + " " + curAmount + " " + curSpent;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+        }
+        try (PrintWriter pr = new PrintWriter(f)) {
+            pr.print(complete);
+        }catch (Exception e) {
         }
     }
-
 }
