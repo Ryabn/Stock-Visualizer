@@ -68,8 +68,8 @@ public class AutocompleteSearch extends JTextField{
      * "SYB","STOCK COMPANY NAME2"....\n
      */
     public void parse(){
-        File f = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocks2.txt");
-        try(PrintWriter p = new PrintWriter(new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList2.txt"));){
+        File f = new File("src/parsed/stocks2.txt");
+        try(PrintWriter p = new PrintWriter(new File("src/parsed/stocksList2.txt"));){
             try(Scanner sc = new Scanner(f)){
                 sc.nextLine();
                 while(sc.hasNext()){
@@ -104,8 +104,8 @@ public class AutocompleteSearch extends JTextField{
      *
      */
     public void loadAll(){
-        File listFile = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList.txt");
-        File listFile2 = new File("/Users/ryanyang/Desktop/Workspace/CS003B/StockVisualizer/src/tech/ryanqyang/stocksList2.txt");
+        File listFile = new File("src/parsed/stocksList.txt");
+        File listFile2 = new File("src/parsed/stocksList2.txt");
         retrieveList(listFile);
         retrieveList(listFile2);
     }

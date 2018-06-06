@@ -97,8 +97,8 @@ public class StockGraph extends JPanel{
 
         chart = ChartFactory.createTimeSeriesChart(
                 stockParser.getSymbolName() + " - " + stockParser.getPriceList().get(stockParser.getPriceList().size() - 1),
-                null,
-                null,
+                "Time (EST)",
+                "Value ($USD)",
                  new TimeSeriesCollection(ds),
                 false,
                 false,
@@ -107,7 +107,9 @@ public class StockGraph extends JPanel{
         setChartProperties();
         chart.getXYPlot().getRenderer().setSeriesPaint(0, new Color(150, 0, 250));
         cp = new ChartPanel(chart);
+        cp.setPreferredSize(new Dimension((int)(getWidth()*0.95), (int) (getHeight()* 0.92)));
         add(cp);
+        StockPortfolio.readFile();
         repaint(); // This method makes the new chart appear
     }
 
